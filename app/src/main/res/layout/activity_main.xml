@@ -45,7 +45,7 @@
             android:textSize="@dimen/h3" />
 
         <EditText
-            android:layout_width="@dimen/text_block_size"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
             android:ems="10"
@@ -55,7 +55,7 @@
             android:textSize="@dimen/h2" />
 
         <EditText
-            android:layout_width="@dimen/text_block_size"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ems="10"
             android:id="@+id/editText2"
