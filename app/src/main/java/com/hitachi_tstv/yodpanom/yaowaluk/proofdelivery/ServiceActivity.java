@@ -36,6 +36,8 @@ public class ServiceActivity extends AppCompatActivity {
     private MyConstant myConstant = new MyConstant();
     private String[] planIdStrings,planDateStrings, cnt_storeStrings;
     private boolean aBoolean = true;
+    private String[] workSheetStrings, storeNameStrings,
+            planArrivalTimeStrings, planDtl2_idStrings ;
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -248,6 +250,33 @@ public class ServiceActivity extends AppCompatActivity {
             super.onPostExecute(s);
 
             Log.d("12octV2", "Json ==> " + s);
+
+            try{
+
+                JSONArray jsonArray = new JSONArray(s);
+
+                workSheetStrings = new String[jsonArray.length()];
+                storeNameStrings = new String[jsonArray.length()];
+                planArrivalTimeStrings = new String[jsonArray.length()];
+                planDtl2_idStrings = new String[jsonArray.length()];
+
+                for (int i=0;i<jsonArray.length();i++){
+
+                    JSONObject jsonObject = jsonArray.getJSONObject(i);
+                    workSheetStrings[i] = jsonObject.getString("work_sheet_no");
+                    storeNameStrings[i] = jsonObject.getString("store_nameEng");
+                    planArrivalTimeStrings[i] = jsonObject.getString("plan_arrivalTime");
+                    planDtl2_idStrings[i] = jsonObject.getString("planDtl2_id");
+
+                } // for
+
+                DetailAdapter detailAdapter = new DetailAdapter(context, workSheetStrings,
+                        storeNameStrings, planArrivalTimeStrings);
+                listView.setAdapter(detailAdapter);
+
+            }catch(Exception e){
+                Log.d("12octV2" , "e onPost ==> " + e.toString());
+            }
         } // onPost
 
     } // SynDetail
