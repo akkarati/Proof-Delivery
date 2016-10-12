@@ -16,7 +16,16 @@ public class MyConstant {
     private String messageUserFalesString = "ไม่มี User นี้ในฐานข้อมูลของเรา";
     private String titlePasswordFalse = "Password ผิด";
     private String messagePasswordFalse = "กรุณาลองใหม่ Passwordผิด";
+    private String urlDataWhereDriverID = "http://service.eternity.co.th/TmsPXD/app/CenterService/getPlan.php";
+    private String urlDataWhereDriverIDanDate = "";
 
+    public String getUrlDataWhereDriverID() {
+        return urlDataWhereDriverID;
+    }
+
+    public String getUrlDataWhereDriverIDanDate() {
+        return urlDataWhereDriverIDanDate;
+    }
 
     public String getTitlePasswordFalse() {
         return titlePasswordFalse;
@@ -54,4 +63,3 @@ public class MyConstant {
         return messageHaveeSpaceString;
     }
 }//Main Class
-
