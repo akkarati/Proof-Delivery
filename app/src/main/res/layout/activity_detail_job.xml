@@ -25,35 +25,30 @@
         android:id="@+id/linTopDetail">
 
         <TextView
-            android:text="TextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/textView14"
             android:textSize="@dimen/h2" />
 
         <TextView
-            android:text="TextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/textView15"
             android:textSize="@dimen/h2" />
 
         <TextView
-            android:text="TextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/textView16"
             android:textSize="@dimen/h2" />
 
         <TextView
-            android:text="TextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/textView17"
             android:textSize="@dimen/h2" />
 
         <TextView
-            android:text="TextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/textView18"
@@ -101,14 +96,14 @@
 
             <Button
                 android:text="Button"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/button3"
                 android:layout_weight="1" />
 
             <Button
                 android:text="Button"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/button5"
                 android:layout_weight="1" />
@@ -122,14 +117,14 @@
 
             <Button
                 android:text="Button"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/button7"
                 android:layout_weight="1" />
 
             <Button
                 android:text="Button"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:id="@+id/button6"
                 android:layout_weight="1" />
