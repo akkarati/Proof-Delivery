@@ -3,6 +3,7 @@ package com.hitachi_tstv.yodpanom.yaowaluk.proofdelivery;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,6 +13,10 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.google.android.gms.appindexing.Action;
+import com.google.android.gms.appindexing.AppIndex;
+import com.google.android.gms.appindexing.Thing;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.squareup.okhttp.FormEncodingBuilder;
 import com.squareup.okhttp.OkHttpClient;
 import com.squareup.okhttp.Request;
@@ -29,8 +34,13 @@ public class ServiceActivity extends AppCompatActivity {
     private ListView listView;
     private String[] loginStrings;
     private MyConstant myConstant = new MyConstant();
-    private String[] planDateStrings, cnt_storeStrings;
+    private String[] planIdStrings,planDateStrings, cnt_storeStrings;
     private boolean aBoolean = true;
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    private GoogleApiClient client;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +64,55 @@ public class ServiceActivity extends AppCompatActivity {
         SynDataWhereByDriverID synDataWhereByDriverID = new SynDataWhereByDriverID(ServiceActivity.this);
         synDataWhereByDriverID.execute(myConstant.getUrlDataWhereDriverID());
 
+        //Close Controller
+        closeButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view){
+                finish();
+            }
+
+        });
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client = new GoogleApiClient.Builder(this).addApi(AppIndex.API).build();
     }//Main Method
+
+    /**
+     * ATTENTION: This was auto-generated to implement the App Indexing API.
+     * See https://g.co/AppIndexing/AndroidStudio for more information.
+     */
+    public Action getIndexApiAction() {
+        Thing object = new Thing.Builder()
+                .setName("Service Page") // TODO: Define a title for the content shown.
+                // TODO: Make sure this auto-generated URL is correct.
+                .setUrl(Uri.parse("http://[ENTER-YOUR-URL-HERE]"))
+                .build();
+        return new Action.Builder(Action.TYPE_VIEW)
+                .setObject(object)
+                .setActionStatus(Action.STATUS_TYPE_COMPLETED)
+                .build();
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        client.connect();
+        AppIndex.AppIndexApi.start(client, getIndexApiAction());
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+
+        // ATTENTION: This was auto-generated to implement the App Indexing API.
+        // See https://g.co/AppIndexing/AndroidStudio for more information.
+        AppIndex.AppIndexApi.end(client, getIndexApiAction());
+        client.disconnect();
+    }
 
     private class SynDataWhereByDriverID extends AsyncTask<String, Void, String> {
         //Explicit
@@ -103,25 +161,30 @@ public class ServiceActivity extends AppCompatActivity {
                 JSONArray jsonArray = new JSONArray(s);
                 planDateStrings = new String[jsonArray.length()];
                 cnt_storeStrings = new String[jsonArray.length()];
-                for (int i = 0;i < jsonArray.length();i++) {
+                planIdStrings = new String[jsonArray.length()];
+                for (int i = 0; i < jsonArray.length(); i++) {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
                     planDateStrings[i] = jsonObject.getString("planDate");
                     cnt_storeStrings[i] = jsonObject.getString("cnt_store");
+                    planIdStrings[i] = jsonObject.getString("planId");
                 }//for
                 if (aBoolean) {
                     //true :: not click on button
                     jobListButton.setText("Job List :: " + planDateStrings[0]);
 
-                }
+                    createDetailList(planIdStrings[0] );
+
+
+                } // if
 
                 // Get Event Form Click
-                jobListButton.setOnClickListener(new View.OnClickListener(){
+                jobListButton.setOnClickListener(new View.OnClickListener() {
                     @Override
-                    public void onClick(View view){
+                    public void onClick(View view) {
 
-                        Intent intent = new Intent(ServiceActivity.this,JobListView.class);
-                        intent.putExtra("Date" , planDateStrings);
-                        intent.putExtra("Store" , cnt_storeStrings);
+                        Intent intent = new Intent(ServiceActivity.this, JobListView.class);
+                        intent.putExtra("Date", planDateStrings);
+                        intent.putExtra("Store", cnt_storeStrings);
                         startActivity(intent);
 
                     } // onClick
@@ -134,6 +197,61 @@ public class ServiceActivity extends AppCompatActivity {
             }
         }
     }//SynDataWhereByDriverID
+
+    private void createDetailList(String planIDString) {
+
+        SynDetail synDetail = new SynDetail(ServiceActivity.this,
+                planIDString );
+        synDetail.execute(myConstant.getUrlDataWhereDriverIDanDate());
+    } //  createDetailList
+
+    private class SynDetail extends AsyncTask<String, Void, String> {
+
+        //Explicit
+        private Context context;
+        private String planIdString, planDateString;
+
+        public SynDetail(Context context, String planIdString) {
+            this.context = context;
+            this.planIdString = planIdString;
+            this.planDateString = planDateString;
+        }
+
+
+        @Override
+        protected String doInBackground(String... params) {
+
+            try{
+                OkHttpClient okHttpClient = new OkHttpClient();
+                RequestBody requestBody = new FormEncodingBuilder()
+                        .add("isAdd","true")
+                        .add("planId",planIdString)
+                        .add("driver_id",loginStrings[0])
+                        .build();
+                Request.Builder builder = new Request.Builder();
+                Request request = builder.url(params[0]).post(requestBody).build();
+                Response response = okHttpClient.newCall(request).execute();
+
+                return response.body().string();
+
+
+            }catch(Exception e){
+                Log.d("12octV2","e doInBack " + e.toString());
+                return null;
+            }
+
+
+        } // doInBack
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            Log.d("12octV2", "Json ==> " + s);
+        } // onPost
+
+    } // SynDetail
+
 
 }//Main Class
 
